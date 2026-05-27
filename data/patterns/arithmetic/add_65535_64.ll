@@ -1,0 +1,5 @@
+define i64 @pattern_add_65535_64(i64 %x) {
+entry:
+  %result = add i64 %x, 65535
+  ret i64 %result
+}

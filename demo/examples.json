@@ -1,0 +1,67 @@
+[
+  {
+    "label": "arithmetic -- add-sub cancel: (x + y + 1) - x",
+    "category": "arithmetic",
+    "ir": "define i32 @f(i32 %x, i32 %y) {\nentry:\n  %0 = add i32 %x, %y\n  %1 = add i32 %0, 1\n  %2 = sub i32 %1, %x\n  ret i32 %2\n}"
+  },
+  {
+    "label": "arithmetic -- multiply by 1 identity",
+    "category": "arithmetic",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = mul i32 %x, 1\n  ret i32 %1\n}"
+  },
+  {
+    "label": "arithmetic -- add zero identity",
+    "category": "arithmetic",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = add i32 %x, 0\n  ret i32 %1\n}"
+  },
+  {
+    "label": "arithmetic -- add then subtract cancel",
+    "category": "arithmetic",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = add i32 %x, 5\n  %2 = sub i32 %1, 5\n  ret i32 %2\n}"
+  },
+  {
+    "label": "bitwise -- xor with zero",
+    "category": "bitwise",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = xor i32 %x, 0\n  ret i32 %1\n}"
+  },
+  {
+    "label": "bitwise -- and with all-ones",
+    "category": "bitwise",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = and i32 %x, -1\n  ret i32 %1\n}"
+  },
+  {
+    "label": "bitwise -- xor self equals zero",
+    "category": "bitwise",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = xor i32 %x, %x\n  ret i32 %1\n}"
+  },
+  {
+    "label": "comparison -- icmp eq self (always true)",
+    "category": "comparison",
+    "ir": "define i1 @f(i32 %x) {\nentry:\n  %1 = icmp eq i32 %x, %x\n  ret i1 %1\n}"
+  },
+  {
+    "label": "shifts -- shl by zero identity",
+    "category": "shifts",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = shl i32 %x, 0\n  ret i32 %1\n}"
+  },
+  {
+    "label": "select_phi -- select with true condition",
+    "category": "select_phi",
+    "ir": "define i32 @f(i32 %x, i32 %y) {\nentry:\n  %1 = select i1 true, i32 %x, i32 %y\n  ret i32 %1\n}"
+  },
+  {
+    "label": "bitwise -- complex and-xor-or chain",
+    "category": "bitwise",
+    "ir": "define i32 @f(i32 %x, i32 %y) {\nentry:\n  %1 = and i32 %x, %y\n  %2 = xor i32 %1, -1\n  %3 = or i32 %x, %y\n  %4 = and i32 %2, %3\n  ret i32 %4\n}"
+  },
+  {
+    "label": "arithmetic -- exact signed division by 4",
+    "category": "arithmetic",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = sdiv exact i32 %x, 4\n  %2 = mul nsw i32 %1, 4\n  ret i32 %2\n}"
+  },
+  {
+    "label": "arithmetic -- multiply and add constant",
+    "category": "arithmetic",
+    "ir": "define i32 @f(i32 %x) {\nentry:\n  %1 = mul nsw i32 %x, 17\n  %2 = add nsw i32 %1, 5\n  ret i32 %2\n}"
+  }
+]
