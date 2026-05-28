@@ -41,18 +41,15 @@ if [ -f "venv/bin/activate" ]; then
     pip install -q google-generativeai pandas matplotlib seaborn tqdm
 elif command -v python3 -m venv &> /dev/null 2>&1; then
     echo "  Creating venv..."
-    python3 -m venv venv 2>/dev/null && {
-        source venv/bin/activate
-        pip install -q google-generativeai pandas matplotlib seaborn tqdm
-    } || {
-        echo "  venv creation failed — installing with --user"
-        pip3 install --user --break-system-packages google-generativeai pandas matplotlib seaborn tqdm 2>/dev/null || \
-        pip3 install --user google-generativeai pandas matplotlib seaborn tqdm
+    python3 -m venv venv || {
+        echo "  ✗ venv creation failed. Please check your Python installation."
+        exit 1
     }
+    source venv/bin/activate
+    pip install -q google-generativeai pandas matplotlib seaborn tqdm
 else
-    echo "  No venv support — installing with --user"
-    pip3 install --user --break-system-packages google-generativeai pandas matplotlib seaborn tqdm 2>/dev/null || \
-    pip3 install --user google-generativeai pandas matplotlib seaborn tqdm
+    echo "  ✗ No venv support found. Please install python3-venv."
+    exit 1
 fi
 echo "  ✓ Python packages installed"
 
@@ -74,8 +71,6 @@ echo ""
 echo "[4/5] Generating dataset..."
 
 python3 src/dataset/generator.py
-python3 src/dataset/c_harvester.py
-python3 src/dataset/filter_preopt.py
 
 PATTERN_COUNT=$(python3 -c "import json; print(len(json.load(open('data/dataset.json'))))")
 echo ""
