@@ -143,7 +143,31 @@ uvicorn demo.app:app --reload
 
 ## Usage
 
-### Step-by-step Execution
+### 1. Dataset Generation (Optional)
+
+The repository comes with a pre-generated `dataset.json` containing 200 patterns (150 missed optimizations and 50 control patterns). If you wish to regenerate these exact 200 patterns from scratch, run the synthetic pattern generator:
+
+```bash
+python3 src/dataset/generator.py
+```
+
+*(Note: `c_harvester.py` and `filter_preopt.py` are extended scripts used for broader discovery, but the core 200 pattern dataset is generated directly via `generator.py`.)*
+
+### 2. Using Shell Scripts (Recommended)
+
+The easiest way to interact with the project is using the provided shell scripts in the `scripts/` directory:
+
+```bash
+./scripts/setup.sh         # One-time setup: installs dependencies, sets up directories, and builds the dataset
+./scripts/build_alive2.sh  # Downloads and builds Alive2 (for Tier 3 formal verification)
+./scripts/verify.sh        # Runs tests to verify all components and dependencies are working
+./scripts/run.sh           # Runs the main LLM peephole optimization experiment
+./scripts/report.sh        # Generates metrics, plots, failure analysis, and the final markdown report
+```
+
+### 3. Step-by-step Execution
+
+If you prefer to run the components manually instead of using the shell scripts:
 
 ```bash
 # 1. Run the pipeline (generates results.sqlite)
