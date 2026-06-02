@@ -53,8 +53,6 @@ def count_instructions(ir: str) -> int:
             continue
         if stripped.endswith(':'):  # block labels like "entry:"
             continue
-        if stripped.startswith('ret '):
-            continue
         if stripped.startswith('declare'):
             continue
         if stripped.startswith('!'):

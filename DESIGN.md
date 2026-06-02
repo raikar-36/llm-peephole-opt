@@ -4,7 +4,7 @@
 
 > **Can LLMs discover missed peephole optimizations in LLVM IR?**
 
-Peephole optimizations are small, local rewrites that replace a short instruction sequence with a semantically equivalent but more efficient one. LLVM's optimizer contains thousands of hand-coded patterns, but coverage is incomplete. This project tests whether a large language model (Gemini 3.1 Flash Lite) can find patterns that LLVM misses.
+Peephole optimizations are small, local rewrites that replace a short instruction sequence with a semantically equivalent but more efficient one. LLVM's optimizer contains thousands of hand-coded patterns, but coverage is incomplete. This project tests whether a large language model can find patterns that LLVM misses.
 
 ---
 
@@ -21,16 +21,15 @@ Instead of hand-crafting test cases, we:
 
 This creates a controlled experiment: every pattern in the dataset is something LLVM genuinely misses, so any valid LLM rewrite is a real finding.
 
-### Why Gemini 3.1 Flash Lite?
+### Why GPT-OSS, Gemini, and Llama?
 
-| Factor | Gemini 3.1 Flash Lite |
+| Factor | Capable LLMs (e.g. GPT-OSS-120b) |
 |--------|------------------|
-| Cost | Free (1,500 req/day) |
 | Speed | Fast (~1s/query) |
 | LLVM IR knowledge | High |
 | JSON output | Reliable |
 
-Gemini 3.1 Flash Lite was chosen because the free tier provides enough quota to run the full experiment rapidly. The approach is model-agnostic, and the client module can be extended for other models.
+We evaluated three specific models—**GPT-OSS-120b**, **Gemini 3.1 Flash-Lite**, and **Llama 3.3 70b**—to test a range of architectures (mixture-of-experts vs dense) and deployment strategies (Groq vs Google APIs). State-of-the-art language models possess deep semantic understanding of intermediate representations and can reliably output structured JSON. The approach is inherently model-agnostic, and our framework successfully highlights the disparity in compiler intuition among different architectures.
 
 ---
 
@@ -57,6 +56,41 @@ Patterns LLVM misses tend to be:
 ---
 
 ## 3. Validation Architecture
+
+### Architecture Flow
+
+```mermaid
+graph TD
+    subgraph "Phase 1: Dataset Generation"
+        A[Synthetic Combinatorial Generator] --> C
+        B[C-to-IR Harvester] --> C
+        C{LLVM 'opt -O2'}
+        C -- Modifies IR --> D[Discard]
+        C -- Misses Optimization --> E[(Curated Missed Patterns)]
+    end
+
+    subgraph "Phase 2: LLM Inference"
+        E --> F[Prompt Engine]
+        F --> G[LLM API ]
+        G --> H[JSON Parser]
+        H -- "PARSE_ERROR" --> I[Tier 1 Filter]
+        H -- "NO_OPT" --> J(Correct Refusal / Missed Detection)
+        H -- "Optimized IR" --> K[Candidate Rewrite]
+    end
+
+    subgraph "Phase 3: Formal Verification Pipeline"
+        K --> L{"Tier 1: Syntactic Check"}
+        L -- "Syntax / Sig Mismatch" --> M(Hallucinated)
+        L -- "Valid LLVM IR" --> N{"Tier 2: Dynamic Bounded Testing"}
+        
+        N -- "Execution Diverges" --> O(Invalid Semantic Bug)
+        N -- "10,000 Fuzz Passes" --> P{"Tier 3: Alive2 SMT Solver"}
+        
+        P -- "Counterexample Found" --> O
+        P -- "Z3 Solver Timeout" --> Q(Uncertain)
+        P -- "Formally Equivalent" --> R(VALID: Novel Optimization)
+    end
+```
 
 ### Why 3 tiers?
 

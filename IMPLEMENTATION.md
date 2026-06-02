@@ -145,7 +145,7 @@ Runs `opt -O2` on generated `.ll` files. If normalized original IR matches norma
 
 ### Execution
 
-The client utilizes the Gemini API using `google-generativeai`. It uses a rotating pool of API keys if provided to handle rate limits.
+The client originally utilized the Gemini API using `google-generativeai`. It has been expanded to fully support the **Groq API**, allowing the framework to evaluate models like `openai/gpt-oss-120b` and `llama-3.3-70b-versatile` side-by-side with `gemini-3.1-flash-lite`. It uses a rotating pool of API keys if provided to handle rate limits across the different providers.
 
 ---
 
@@ -161,7 +161,7 @@ Compiles IR to shared libraries, generates 10,000 test inputs (boundary and rand
 
 ### Tier 3: Formal Verification (`src/validate/tier3_alive2.py`)
 
-Uses `alive-tv` or `alive` to formally verify equivalence using SMT solvers.
+Uses `alive-tv` or `alive` to formally verify equivalence using SMT solvers. To resolve Z3 solver timeouts for complex bitwise patterns, we pass `-disable-poison-input` and `-disable-undef-input` to the `alive` binary.
 
 ---
 

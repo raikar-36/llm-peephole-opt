@@ -164,8 +164,8 @@ def optimize(req: OptimizeRequest):
 
     # Step 1: Query LLM
     try:
-        from src.llm.client import GeminiClient
-        client = GeminiClient(api_key=api_key, model="gemini-3.1-flash-lite")
+        from src.llm.client import GroqClient
+        client = GroqClient(api_key=api_key, model="openai/gpt-oss-120b")
         llm_result = client.query_single(ir_code)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"LLM query failed: {str(e)[:200]}")
