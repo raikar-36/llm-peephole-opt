@@ -217,7 +217,7 @@ llm-peephole-opt/
 ├── scripts/                    # Automation scripts (run, report generation)
 ├── results/                    # Output plots (e.g., hallucination breakdowns)
 └── model_comparison/           # Detailed cross-model analysis and performance graphics
-
+```
 ### Documentation Files
 - **[`README.md`](./README.md)**: Project overview, setup instructions, and quick start guide.
 - **[`DESIGN.md`](./DESIGN.md)**: Architecture flow, validation tiers rationale, and prompt engineering choices.
@@ -225,7 +225,7 @@ llm-peephole-opt/
 - **[`EVALUATION.md`](./EVALUATION.md)**: Summary of the multi-model comparison, hallucination rates, and failure modes.
 - **[`REPORT.md`](./REPORT.md)**: Final academic-style project report answering the core research questions.
 - **[`PRESENTATION.md`](./PRESENTATION.md)**: Final presentation slides outlining examples, metrics, and lessons learned.
-```
+
 
 ---
 
