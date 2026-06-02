@@ -12,6 +12,10 @@ if [ -f "venv/bin/activate" ]; then
     source venv/bin/activate
 fi
 
+# ── Link the best model database ──────────────────────────────
+echo "Linking data/results_gpt-oss-120b.sqlite to data/results.sqlite for report generation..."
+cp -f data/results_gpt-oss-120b.sqlite data/results.sqlite
+
 # ── Check database exists ─────────────────────────────────────
 if [ ! -f "data/results.sqlite" ]; then
     echo "ERROR: data/results.sqlite not found!"

@@ -28,40 +28,39 @@
 | Metric | Count / Value |
 |--------|---------------|
 | Total Patterns | 150 |
-| Accuracy (Valid) | 50.7% |
-| INVALID | 24 |
-| MISSED_DETECTION | 4 |
-| UNCERTAIN | 46 |
-| VALID | 76 |
+| Accuracy (Valid) | 93.3% |
+| HALLUCINATED | 7 |
+| MISSED_DETECTION | 3 |
+| VALID | 140 |
 
 #### Control Group (is_missed = False)
 | Metric | Count / Value |
 |--------|---------------|
 | Total Patterns | 50 |
-| Accuracy (Correct Refusal) | 72.0% |
-| CORRECT_REFUSAL | 36 |
-| INVALID | 14 |
+| Accuracy (Correct Refusal) | 98.0% |
+| CORRECT_REFUSAL | 49 |
+| HALLUCINATED | 1 |
 
-**Key Finding:** LLMs show strong capability in discovering valid peephole optimizations, with a validity rate of 50.7%.
+**Key Finding:** LLMs show strong capability in discovering valid peephole optimizations, with a validity rate of 93.3%.
 
 ### 3. Results by Category
 
 | Category | Count | Validity Rate | Hallucination Rate |
 |----------|-------|---------------|-------------------|
-| arithmetic | 58 | 60.3% | 0.0% |
-| bitwise | 57 | 0.0% | 0.0% |
+| arithmetic | 58 | 56.9% | 3.4% |
+| bitwise | 57 | 49.1% | 5.3% |
 | casts | 15 | 100.0% | 0.0% |
 | comparison | 20 | 100.0% | 0.0% |
-| overflow_flags | 10 | 0.0% | 0.0% |
-| select_phi | 15 | 40.0% | 0.0% |
-| shifts | 25 | 0.0% | 0.0% |
+| overflow_flags | 10 | 50.0% | 30.0% |
+| select_phi | 15 | 100.0% | 0.0% |
+| shifts | 25 | 96.0% | 0.0% |
 
 ### 4. Confidence Calibration
 
 | Confidence Level | Validity Rate |
 |-----------------|---------------|
-| HIGH | 38.8% |
-| MEDIUM | 0.0% |
+| HIGH | 72.0% |
+| MEDIUM | 100.0% |
 | LOW | 0.0% |
 
 ⚠️ **Calibration is poor:** confidence levels don't consistently predict validity.
@@ -70,22 +69,21 @@
 
 | Metric | Value |
 |--------|-------|
-| Mean reduction | 58.8% |
-| Median reduction | 66.7% |
+| Mean reduction | 47.6% |
+| Median reduction | 40.0% |
 | Max reduction | 66.7% |
-| Min reduction | 33.3% |
+| Min reduction | 20.0% |
 
 ### 6. Failure Analysis
 
-Total failures analyzed: 38
+Total failures analyzed: 8
 
 | Failure Mode | Count | Percentage |
 |-------------|-------|------------|
-| Added complexity instead of reducing it | 35 | 92.1% |
-| Incorrect algebraic identity | 3 | 7.9% |
+| Unparseable LLVM IR | 8 | 100.0% |
 
-**Top failure mode:** Added complexity instead of reducing it (35 cases, 92.1%)
+**Top failure mode:** Unparseable LLVM IR (8 cases, 100.0%)
 
 ### 7. Conclusions
 
-LLMs show significant promise as tools for discovering missed peephole optimizations in LLVM IR. With a validity rate of 50.7%, they can find new optimization patterns. The hallucination rate was 0.0%, meaning the model successfully produced syntactically valid IR in all cases, though the semantic correctness varied. 30.7% of patterns exceeded Alive2's verification timeout at 90 seconds, representing the current practical boundary of SMT-based equivalence checking for this pattern complexity. The dominant failure mode — Added complexity instead of reducing it — suggests targeted improvements to the prompting strategy could further improve results.
+LLMs show significant promise as tools for discovering missed peephole optimizations in LLVM IR. With a validity rate of 93.3%, they can find new optimization patterns. The hallucination rate was 4.0%, meaning the model successfully produced syntactically valid IR in the vast majority of cases, though semantic correctness varied. 0.0% of patterns exceeded Alive2's verification timeout, representing cases where SMT-based equivalence checking was too complex. The dominant failure mode — Unparseable LLVM IR — suggests targeted improvements to the prompting strategy could further improve results.

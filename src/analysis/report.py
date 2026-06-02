@@ -215,15 +215,18 @@ def generate_report(db_path: str, output_path: str = "results/research_report.md
             f"LLVM IR rewrites, with a validity rate of only {pct(vr)}. "
         )
 
+    hallucination_count = counts_true.get('HALLUCINATED', 0) + counts_false.get('HALLUCINATED', 0)
+    total_halluc_rate = hallucination_count / total_results if total_results > 0 else 0
     conclusion += (
-        f"The hallucination rate was 0.0%, meaning the model successfully produced "
-        f"syntactically valid IR in all cases, though the semantic correctness varied. "
+        f"The hallucination rate was {pct(total_halluc_rate)}, meaning the model successfully produced "
+        f"syntactically valid IR in the vast majority of cases, though semantic correctness varied. "
     )
     
-    uncertain_rate = m_true.get('uncertain', 0) / total_true if total_true > 0 else 0
+    uncertain_count = counts_true.get('UNCERTAIN', 0) + counts_false.get('UNCERTAIN', 0)
+    uncertain_rate = uncertain_count / total_results if total_results > 0 else 0
     conclusion += (
-        f"{pct(uncertain_rate)} of patterns exceeded Alive2's verification timeout at 90 seconds, "
-        f"representing the current practical boundary of SMT-based equivalence checking for this pattern complexity. "
+        f"{pct(uncertain_rate)} of patterns exceeded Alive2's verification timeout, "
+        f"representing cases where SMT-based equivalence checking was too complex. "
     )
 
     if failure_counts:

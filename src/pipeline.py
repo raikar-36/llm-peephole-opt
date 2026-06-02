@@ -92,6 +92,7 @@ class Pipeline:
                     provider='groq',
                     api_key=config.get('groq_api_key'),
                     model=config.get('groq_model', 'llama-3.3-70b-versatile'),
+                    rpm_limit=int(os.environ.get('GROQ_RPM_LIMIT', '30')),
                     logger=self.logger,
                 )
             else:

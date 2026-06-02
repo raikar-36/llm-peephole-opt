@@ -211,7 +211,7 @@ def alive2_validate(original_ir: str, rewrite_ir: str,
             with open(rewrite_file, 'w') as f:
                 f.write(rewrite_ir)
 
-            cmd = [alive_tv_path, orig_file, rewrite_file]
+            cmd = [alive_tv_path, "-disable-poison-input", "-disable-undef-input", orig_file, rewrite_file]
         else:
             # alive mode: single .opt file with source => target
             opt_content = _ir_to_opt(original_ir, rewrite_ir)
@@ -220,7 +220,7 @@ def alive2_validate(original_ir: str, rewrite_ir: str,
             with open(opt_file, 'w') as f:
                 f.write(opt_content)
 
-            cmd = [alive_tv_path, opt_file]
+            cmd = [alive_tv_path, "-disable-poison-input", "-disable-undef-input", opt_file]
 
         try:
             result = subprocess.run(

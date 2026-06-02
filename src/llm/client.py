@@ -550,7 +550,10 @@ def create_llm_client(
     if provider == "groq":
         api_key = kwargs.pop("api_key", None) or os.environ.get("GROQ_API_KEY", "").strip()
         model = kwargs.pop("model", None) or os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
-        return GroqClient(api_key=api_key, model=model, logger=logger, **kwargs)
+        rpm_limit = kwargs.pop("rpm_limit", None)
+        if rpm_limit is None:
+            rpm_limit = int(os.environ.get("GROQ_RPM_LIMIT", "30"))
+        return GroqClient(api_key=api_key, model=model, rpm_limit=rpm_limit, logger=logger, **kwargs)
     elif provider == "gemini":
         api_keys = kwargs.pop("api_keys", None)
         if api_keys is None:
